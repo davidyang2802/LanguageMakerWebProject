@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>David's Language Maker Website</h1>
+    <p class="lead">This website is a pet project of mine. When I was a kid, I read a lot of books and thought that I should become a fantasy author. 
+    As I grew up, I realized that this would require quite a lot of planning, especially with names - which I would obsess over. 
+    I also couldn't quite accept that the fantasy worlds that I created would end up speaking english.
+    </p>
+    <p class="lead">I concluded that if I really were to write fantasy, I would need to create a new language - possibly even multiple new languages. 
+    As an adult, I no longer aspire to become an author - but this idea of creating my own language stuck in the back of my mind. This would be an interesting project to pursue.</p>
+</div>
+
+<div class="row">
+    <h2>How would I create a language?</h2>
+    <p>
+        Languages consist of words, so creating a language means creating new words. Words are made up of letters - in english we have the english alphabet. 
+        The basic concept for creating a word would thus be putting letters together - but languages are more complex than that.
+    </p>
+    <p>
+        In english, we classifly letters as either consonants or vowels and words are generally a combination of both - a vowel is required.
+        Thus, in order to create a word, we would need "Letter Types" and "Word Patterns" that consist of these "Letter Types".
+    </p>
+    <p>
+        For example, english would have Letter Types of consonants - as 'c', and vowels - as 'v'.
+        The english word "word" has the Word Pattern of consonant vowel consonant : 'c v c'.
+    </p>
+    <p>
+        This is necessary to do because words do need to follow some type of structure - in english we don't have words following the Word Patterns of 'c c c c' or 'v v v v'.
+    </p>
+    <p>
+        So in order to create words, we need Letters, Letter Types and Word Patterns.
+        When we create a word, this website should randomize Letters into Word Patterns and give the user a list of possible words to chose from.
+    </p>
+</div>
+
+<div class="row">
+    <h2>Words mean something</h2>
+    <p>
+        Words also have meanings and there are different types of words. 
+        The meanings are assigned to words as "Definitions" and are simply lines of text written by users. 
+        Words can have multiple Definitions assigned. 
+        In english, the common word types almost everyone knows are nouns, verbs and adjectives. 
+        This website assigns such word types to each word, as "Classifications".
+    </p>
+    <p>
+        While it would great to make all the words of a language from scratch, usually languages have many words that are linked to each other. 
+        For example, the word "language" apparently originated as a variation of "tongue" -> "langue". 
+        Realistically, when the user is creating a word, they either already have a meaning in mind or instead will think of a meaning after seeing the word. 
+        To simulate a similar effect as the example above we want to do assign "Tags" to existing words and when creating a new word, we need to allow these "Tags" to affect the word creation.
+    </p>
+    <p>
+        Words can have multiple definitions. Classifications are required just to give the words some structure, but Tags are purely optional - they are available just to make the language a bit less random.
+    </p>
+</div>
