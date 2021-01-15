@@ -186,7 +186,7 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LanguageMakerDataLibrary\LanguageMakerDataLibrary.csproj">
+    <ProjectReference Include="LanguageMakerDataLibrary\LanguageMakerDataLibrary.csproj">
       <Project>{fc63aa88-9db6-4a7b-beb9-5bd6ce343ea2}</Project>
       <Name>LanguageMakerDataLibrary</Name>
     </ProjectReference>
