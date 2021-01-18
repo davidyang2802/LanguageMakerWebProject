@@ -52,13 +52,33 @@ namespace LanguageMakerWebProject.Controllers
             return View();
         }
 
-        public ActionResult SignUpBtnClick()
+        public ActionResult LoginUser(UserModel user)
         {
-            if (Session["User"] == null)
+            // We need to remove any invalid username alerts
+            if (Session["Invalid Username"] != null)
             {
-                Session.Add("Users", "");
+                Session.Remove("Invalid Username");
             }
-            return View();
+            // we need to check if the UserId is in the database
+            if (UserProcessor.CheckUsername(user.Username))
+            {
+                if (Session["User"] == null)
+                {
+                    Session.Add("User", UserProcessor.getUserId(user.Username));
+                }
+                else
+                {
+                    Session["User"] = UserProcessor.getUserId(user.Username);
+                }
+
+                return RedirectToAction("Languages", "Language");
+            }
+
+            // the username is not in the database, so we need to return the login page with the invalid username alert
+
+            Session.Add("Invalid Username", 1);
+            
+            return View("Login");
         }
     }
 }

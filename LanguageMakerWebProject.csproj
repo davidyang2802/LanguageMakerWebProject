@@ -168,6 +168,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\User\SignUp.cshtml" />
     <Content Include="Views\Language\LanguagesView.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
