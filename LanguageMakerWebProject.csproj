@@ -167,8 +167,9 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\User\SignUp.cshtml" />
-    <Content Include="Views\Language\LanguagesView.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\Language\Languages.cshtml" />
+    <Content Include="Views\Language\CreateLanguage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

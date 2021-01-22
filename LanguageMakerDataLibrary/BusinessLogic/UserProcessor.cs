@@ -33,7 +33,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         {
             string sql = @"SELECT Id FROM dbo.Users WHERE Username = @Username;";
             var parameters = new { Username = username };
-            return SqlDataAccess.CheckTableDataFromColumn(sql, parameters);
+            return SqlDataAccess.CheckTableDataFromParameters(sql, parameters);
         }
 
         public static int getUserId(string username)
@@ -41,7 +41,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"SELECT Id FROM dbo.Users WHERE Username = @Username;";
             var parameters = new { Username = username };
 
-            return SqlDataAccess.GetFirstTableDataFromColumnValue<int>(sql, parameters);
+            return SqlDataAccess.GetFirstTableDataFromParameters<int>(sql, parameters);
         }
     }
 }

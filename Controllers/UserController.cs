@@ -21,12 +21,18 @@ namespace LanguageMakerWebProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SignUp(UserModel user)
         {
+            // We need to remove any Username already used alerts
+            if (Session["Username already used"] != null)
+            {
+                Session.Remove("Username already used");
+            }
             if (ModelState.IsValid)
             {
                 // we need to check if the UserId is distinct
                 if (UserProcessor.CheckUsername(user.Username))
                 {
-                    // I'm not sure how to do this part
+                    // If the username is already used by another account, we'll need to reload the page with a warning
+                    Session.Add("Username already used", "True");
                     return View();
                 }
                 UserProcessor.CreateUser(user.Username);
@@ -58,6 +64,11 @@ namespace LanguageMakerWebProject.Controllers
             if (Session["Invalid Username"] != null)
             {
                 Session.Remove("Invalid Username");
+            }
+            // We also need to remove any "Please Login" alerts
+            if (Session["Please Login"] != null)
+            {
+                Session.Remove("Please Login");
             }
             // we need to check if the UserId is in the database
             if (UserProcessor.CheckUsername(user.Username))

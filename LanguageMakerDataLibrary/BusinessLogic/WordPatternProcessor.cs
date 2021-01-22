@@ -28,7 +28,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         {
             string sql = @"SELECT Id, Name, Pattern, LanguageId FROM dbo.WordPatterns;";
 
-            return SqlDataAccess.LoadData<WordPatternDataModel>(sql);
+            return SqlDataAccess.LoadData<WordPatternDataModel>(sql).ToList();
         }
     }
 }

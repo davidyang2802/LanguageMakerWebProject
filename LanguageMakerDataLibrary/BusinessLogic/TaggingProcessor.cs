@@ -27,7 +27,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         {
             string sql = @"SELECT Id, WordId, TagId FROM dbo.Taggings;";
 
-            return SqlDataAccess.LoadData<TaggingDataModel>(sql);
+            return SqlDataAccess.LoadData<TaggingDataModel>(sql).ToList();
         }
     }
 }

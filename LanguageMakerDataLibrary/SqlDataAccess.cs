@@ -40,7 +40,7 @@ namespace LanguageMakerDataLibrary
                 return cnn.Execute(sql, data);
             }
         }
-        public static bool CheckTableDataFromColumn(string sql, object parameters)
+        public static bool CheckTableDataFromParameters(string sql, object parameters)
         {
             using (IDbConnection cnn = new SqlConnection(getConnectionString()))
             {
@@ -50,7 +50,7 @@ namespace LanguageMakerDataLibrary
                 else { return false; }
             }
         }
-        public static T GetFirstTableDataFromColumnValue<T>(string sql, object parameters)
+        public static T GetFirstTableDataFromParameters<T>(string sql, object parameters)
         {
             using (IDbConnection cnn = new SqlConnection(getConnectionString()))
             {

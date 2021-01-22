@@ -30,7 +30,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         {
             string sql = @"SELECT Id, Text, LanguageId, ClassficationId, Description, Pronounciation FROM dbo.Words;";
 
-            return SqlDataAccess.LoadData<WordDataModel>(sql);
+            return SqlDataAccess.LoadData<WordDataModel>(sql).ToList();
         }
     }
 }

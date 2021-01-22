@@ -28,7 +28,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         {
             string sql = @"SELECT Id, Name, LanguageId, Description FROM dbo.LetterTypes;";
 
-            return SqlDataAccess.LoadData<LetterTypeDataModel>(sql);
+            return SqlDataAccess.LoadData<LetterTypeDataModel>(sql).ToList();
         }
     }
 }

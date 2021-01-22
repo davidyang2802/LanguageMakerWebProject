@@ -30,6 +30,11 @@
         </div>
     </div>
 
+    @if(Session["Please Login"] != null)
+    {
+        <div class="alert-warning" role="alert" }>Please log in to view your languages</div>
+    }
+
     @if (Session["Invalid Username"] != null)
     {
         <div class="alert-warning" role="alert" }>Username is not valid</div>
