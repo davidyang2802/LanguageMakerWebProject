@@ -27,8 +27,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) ||
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Select Language", "SelectLanguage", item)
             </td>
         </tr>
     }
@@ -36,5 +35,5 @@
 </table>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "CreateLanguage")
 </p>

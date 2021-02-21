@@ -37,24 +37,31 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         {
             string sql = @"SELECT Id, Name, UserId, Description FROM dbo.Languages WHERE UserId = @UserId";
 
-            object[] parameters = { userid };
+            var parameters = new { UserId = userid };
 
             return SqlDataAccess.LoadData<LanguageDataModel>(sql, parameters).ToList();
         }
 
         public static bool CheckDistinct(int userid, string name)
         {
-            string sql = @"SELECT Id FROM dbo.Languages WHERE Userid = @Userid AND Name = @Name;";
-            var parameters = new { Userid = userid, Name = name };
+            string sql = @"SELECT Id FROM dbo.Languages WHERE Userid = @UserId AND Name = @Name;";
+            var parameters = new { UserId = userid, Name = name };
             return SqlDataAccess.CheckTableDataFromParameters(sql, parameters);
         }
 
         public static int getLanguageId(int userid, string name)
         {
-            string sql = @"SELECT Id FROM dbo.Languages WHERE Userid = @Userid AND Name = @Name;";
-            var parameters = new { Userid = userid, Name = name };
+            string sql = @"SELECT Id FROM dbo.Languages WHERE Userid = @UserId AND Name = @Name;";
+            var parameters = new { UserId = userid, Name = name };
 
             return SqlDataAccess.GetFirstTableDataFromParameters<int>(sql, parameters);
+        }
+
+        public static int getLanguagesCount(int userid)
+        {
+            string sql = "SELECT COUNT(Id) FROM dbo.Languages WHERE UserId = " + userid.ToString() + ";";
+
+            return SqlDataAccess.getTableCount(sql);
         }
     }
 }

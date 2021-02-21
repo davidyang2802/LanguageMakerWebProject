@@ -25,11 +25,18 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
-        public static List<LetterDataModel> LoadLetters()
+        public static List<LetterDataModel> LoadLetters(int languageid)
         {
-            string sql = @"SELECT Id, Name, LanguageId, Pronounciation, Description FROM dbo.Letters;";
+            string sql = @"SELECT Id, Name, LanguageId, Pronounciation, Description FROM dbo.Letters WHERE LanguageId = @LanguageId;";
+            var parameters = new { LangaugeId = languageid };
 
-            return SqlDataAccess.LoadData<LetterDataModel>(sql).ToList();
+            return SqlDataAccess.LoadData<LetterDataModel>(sql, parameters).ToList();
+        }
+        public static int getLettersCount(int languageid)
+        {
+            string sql = "SELECT COUNT(Id) FROM dbo.Letters WHERE LanguageId = " + languageid.ToString() + ";";
+
+            return SqlDataAccess.getTableCount(sql);
         }
     }
 }

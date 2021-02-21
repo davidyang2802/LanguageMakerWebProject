@@ -126,8 +126,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClassificationModel.cs" />
+    <Compile Include="Models\DefinitionModel.cs" />
     <Compile Include="Models\LanguageModel.cs" />
+    <Compile Include="Models\LetterModel.cs" />
+    <Compile Include="Models\LetterTypeModel.cs" />
+    <Compile Include="Models\TaggingModel.cs" />
+    <Compile Include="Models\TagModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\WordModel.cs" />
+    <Compile Include="Models\WordPatternModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +178,7 @@
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\Language\Languages.cshtml" />
     <Content Include="Views\Language\CreateLanguage.cshtml" />
+    <Content Include="Views\Language\SetupLetterTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

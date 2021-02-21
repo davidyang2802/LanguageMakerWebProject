@@ -32,7 +32,7 @@ namespace LanguageMakerWebProject.Controllers
                 if (UserProcessor.CheckUsername(user.Username))
                 {
                     // If the username is already used by another account, we'll need to reload the page with a warning
-                    Session.Add("Username already used", "True");
+                    Session.Add("Username already used", true);
                     return View();
                 }
                 UserProcessor.CreateUser(user.Username);
@@ -66,9 +66,9 @@ namespace LanguageMakerWebProject.Controllers
                 Session.Remove("Invalid Username");
             }
             // We also need to remove any "Please Login" alerts
-            if (Session["Please Login"] != null)
+            if (Session["No User"] != null)
             {
-                Session.Remove("Please Login");
+                Session.Remove("No User");
             }
             // we need to check if the UserId is in the database
             if (UserProcessor.CheckUsername(user.Username))
@@ -87,7 +87,7 @@ namespace LanguageMakerWebProject.Controllers
 
             // the username is not in the database, so we need to return the login page with the invalid username alert
 
-            Session.Add("Invalid Username", 1);
+            Session.Add("Invalid Username", true);
             
             return View("Login");
         }

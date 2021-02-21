@@ -24,11 +24,19 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
-        public static List<WordPatternDataModel> LoadWordPatterns()
+        public static List<WordPatternDataModel> LoadWordPatterns(int languageid)
         {
-            string sql = @"SELECT Id, Name, Pattern, LanguageId FROM dbo.WordPatterns;";
+            string sql = @"SELECT Id, Name, Pattern, LanguageId FROM dbo.WordPatterns WHERE LanguageId = @LanguageId;";
+            var parameters = new { LanguageId = languageid };
 
-            return SqlDataAccess.LoadData<WordPatternDataModel>(sql).ToList();
+            return SqlDataAccess.LoadData<WordPatternDataModel>(sql, parameters).ToList();
+        }
+
+        public static int getWordPatternsCount(int languageid)
+        {
+            string sql = "SELECT COUNT(Id) FROM dbo.WordPatterns WHERE LanguageId = " + languageid.ToString() + ";";
+
+            return SqlDataAccess.getTableCount(sql);
         }
     }
 }

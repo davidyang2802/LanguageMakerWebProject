@@ -4,7 +4,12 @@
     ViewBag.Title = "CreateLanguage";
 }
 
-<h2>CreateLanguage</h2>
+<h2>Create Language</h2>
+
+@if(Session["No Language"] != null)
+{
+    <div class="alert-warning" role="alert">You do not have any languages. Please create a language</div>
+}
 
 @using (Html.BeginForm()) 
 {
@@ -37,7 +42,3 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

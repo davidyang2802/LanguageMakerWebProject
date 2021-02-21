@@ -40,6 +40,16 @@ namespace LanguageMakerDataLibrary
                 return cnn.Execute(sql, data);
             }
         }
+
+        public static int getTableCount(string sql)
+        {
+            using (IDbConnection cnn = new SqlConnection(getConnectionString()))
+            {
+                //return Int32.Parse(cnn.Query(sql).ToString());
+                return cnn.QuerySingle<int>(sql);
+            }
+        }
+
         public static bool CheckTableDataFromParameters(string sql, object parameters)
         {
             using (IDbConnection cnn = new SqlConnection(getConnectionString()))
@@ -50,6 +60,7 @@ namespace LanguageMakerDataLibrary
                 else { return false; }
             }
         }
+
         public static T GetFirstTableDataFromParameters<T>(string sql, object parameters)
         {
             using (IDbConnection cnn = new SqlConnection(getConnectionString()))

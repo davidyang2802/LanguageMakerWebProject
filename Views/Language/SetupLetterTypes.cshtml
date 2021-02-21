@@ -1,0 +1,90 @@
+﻿@model LanguageMakerWebProject.Models.LetterTypeModel
+
+@{
+    ViewBag.Title = "SetupLetterTypes";
+}
+
+<h2>Setup Letter Types</h2>
+
+<p class="lead">
+    The first step to create a language would be to identify what types of letters will be used.
+    In the english language, we simply the letter types as vowel and consonants, which will be the default letter types recommended.
+</p>
+<p class="lead">
+    As the language creator, you have the option to make your language more intricate by using more letter types.
+    Keep in mind that the letter types will be arranged into word patterns, and having more letter types allows for more complex word pattern rules.
+</p>
+<p class="lead">
+    So for example, if we have vowels as 'v', consonants as 'c', and another letter type for other consonants as 'd', we can specify these patterns:
+</p>
+<p class="lead">
+    'v', 'c v', 'd v', 'v c', 'v d', 'v c d', 'c v d', etc.
+</p>
+
+@{
+    List<LanguageMakerWebProject.Models.LetterTypeModel> lettertypes = (List<LanguageMakerWebProject.Models.LetterTypeModel>)Session["Letter Types"];
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var lettertype in lettertypes)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => lettertype.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => lettertype.Description)
+                </td>
+                <td>
+                    @Html.ActionLink("Remove", "RemoveSetupLetterType", new { lettertype.Name })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <div class="form-horizontal">
+        <h4>Add a Letter Type</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add Letter Type" class="btn btn-default" />
+            </div>
+        </div>
+
+        <div>
+            @Html.ActionLink("Create Letter Types", "CreateLetterTypes")
+        </div>
+    </div>
+}
