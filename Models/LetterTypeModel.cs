@@ -17,5 +17,9 @@ namespace LanguageMakerWebProject.Models
 
         [MaxLength(500, ErrorMessage = "Description must be at most 500 characters.")]
         public string Description { get; set; }
+
+        [MinLength(1, ErrorMessage = "Pattern must be one character.")]
+        [MaxLength(1, ErrorMessage = "Pattern must be one character.")]
+        public char Pattern { get; set; }
     }
 }

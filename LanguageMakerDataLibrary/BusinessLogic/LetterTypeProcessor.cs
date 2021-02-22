@@ -7,31 +7,53 @@ using LanguageMakerDataLibrary.DataModels;
 
 namespace LanguageMakerDataLibrary.BusinessLogic
 {
+    /// <summary>
+    /// Static class to be used for data access to the LetterTypes database table
+    /// </summary>
     public static class LetterTypeProcessor
     {
-        public static int CreateLetterType(string name, int languageid, string description)
+        /// <summary>
+        /// Method to add a letter type to the database
+        /// </summary>
+        /// <param name="name">Name of the letter type</param>
+        /// <param name="languageid">Langauge Id associated with the letter type</param>
+        /// <param name="description">Description of the letter type</param>
+        /// <param name="pattern">Pattern of the letter type</param>
+        /// <returns>Returns the number of records changed</returns>
+        public static int CreateLetterType(string name, int languageid, string description, char pattern)
         {
             LetterTypeDataModel data = new LetterTypeDataModel
             {
                 Name = name,
                 LanguageId = languageid,
-                Description = description
+                Description = description,
+                Pattern = pattern
             };
 
-            string sql = @"INSERT INTO dbo.LetterTypes (Name, LanguageId, Description)
-                           VALUES (@Name, @LanguageId, @Description);";
+            string sql = @"INSERT INTO dbo.LetterTypes (Name, LanguageId, Description, Pattern)
+                           VALUES (@Name, @LanguageId, @Description, @Pattern);";
 
             return SqlDataAccess.SaveData(sql, data);
         }
 
+        /// <summary>
+        /// Method to load all the letter types of a specific language as a list of Letter Type Data Models
+        /// </summary>
+        /// <param name="languageid">Langauge Id associated with the letter type</param>
+        /// <returns>Returns a list of the LetterTypeDataModel objects</returns>
         public static List<LetterTypeDataModel> LoadLetterTypes(int languageid)
         {
-            string sql = @"SELECT Id, Name, LanguageId, Description FROM dbo.LetterTypes WHERE LanguageId = @LanguageId;";
+            string sql = @"SELECT Id, Name, LanguageId, Description, Pattern FROM dbo.LetterTypes WHERE LanguageId = @LanguageId;";
             var parameters = new { LanguageId = languageid };
 
             return SqlDataAccess.LoadData<LetterTypeDataModel>(sql, parameters).ToList();
         }
 
+        /// <summary>
+        /// Method to determine the number of letter types of a specific language
+        /// </summary>
+        /// <param name="languageid">Langauge Id associated with the letter type</param>
+        /// <returns>Returns the number of letter types of a specific language as an int</returns>
         public static int getLetterTypesCount(int languageid)
         {
             string sql = "SELECT COUNT(Id) FROM dbo.LetterTypes WHERE LanguageId = " + languageid.ToString() + ";";

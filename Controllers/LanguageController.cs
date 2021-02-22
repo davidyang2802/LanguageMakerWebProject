@@ -396,8 +396,8 @@ namespace LanguageMakerWebProject.Controllers
             if (Session["Letter Types"] == null)
             {
                 List<LetterTypeModel> lettertypes = new List<LetterTypeModel>();
-                lettertypes.Add(new LetterTypeModel { Name = "Consonant", Description = "Basic letter type, such as b, c & d in English" });
-                lettertypes.Add(new LetterTypeModel { Name = "Vowel", Description = "Basic letter type, such as a, e, and i in English" });
+                lettertypes.Add(new LetterTypeModel { Name = "Consonant", Description = "Basic letter type, such as b, c & d in English", Pattern = 'c' });
+                lettertypes.Add(new LetterTypeModel { Name = "Vowel", Description = "Basic letter type, such as a, e, and i in English", Pattern = 'v' });
                 Session.Add("Letter Types", lettertypes);
             }
 
@@ -435,7 +435,7 @@ namespace LanguageMakerWebProject.Controllers
 
             foreach (LetterTypeModel lt in lettertypes)
             {
-                LetterTypeProcessor.CreateLetterType(lt.Name, (int)Session["Language"], lt.Description);
+                LetterTypeProcessor.CreateLetterType(lt.Name, (int)Session["Language"], lt.Description, lt.Pattern);
             }
 
             Session.Remove("Letter Types");

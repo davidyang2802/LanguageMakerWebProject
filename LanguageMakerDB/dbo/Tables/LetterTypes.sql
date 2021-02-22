@@ -4,5 +4,6 @@
     [Name] NCHAR(30) NULL, 
     [Description] NCHAR(50) NULL, 
     [LanguageId] INT NULL, 
+    [Pattern] NCHAR(1) NULL, 
     CONSTRAINT [FK_LetterTypes_ToLetters] FOREIGN KEY ([LanguageId]) REFERENCES [Languages]([Id])
 )
