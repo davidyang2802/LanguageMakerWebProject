@@ -179,6 +179,8 @@
     <Content Include="Views\Language\Languages.cshtml" />
     <Content Include="Views\Language\CreateLanguage.cshtml" />
     <Content Include="Views\Language\SetupLetterTypes.cshtml" />
+    <Content Include="Views\Language\SetupLetters.cshtml" />
+    <Content Include="Views\Language\SetupWordPatterns.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

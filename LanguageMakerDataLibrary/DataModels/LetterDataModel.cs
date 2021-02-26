@@ -11,6 +11,7 @@ namespace LanguageMakerDataLibrary.DataModels
         public int Id { get; set; }
         public string Name { get; set; }
         public int LanguageId { get; set; }
+        public int LetterTypeId { get; set; }
         public string Pronounciation { get; set; }
         public string Description { get; set; }
     }

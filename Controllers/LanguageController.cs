@@ -450,10 +450,57 @@ namespace LanguageMakerWebProject.Controllers
             {
                 RedirectToAction("Index", "Language");
             }
+
+            int languageid = (int)Session["Language"];
+            // make sure letter types already exist - if they don't, we'll redirect to the setup letter page
+            if (LetterTypeProcessor.getLetterTypesCount(languageid) == 0)
+            {
+                RedirectToAction("SetupLetterTypes", "Language");
+            }
             // need a check for if letters already exist - if so we'll redirect to the Letters page
-            if (LetterProcessor.getLettersCount((int)Session["Language"]) > 0)
+            if (LetterProcessor.getLettersCount(languageid) > 0)
             {
                 RedirectToAction("Letters", "Language");
+            }
+
+            // get all the letter types and save to Session - we'll need this
+            List<LetterTypeDataModel> lettertypes = LetterTypeProcessor.LoadLetterTypes(languageid);
+            Session.Add("Letter Types", lettertypes);
+            List<string> s = new List<string>();
+            foreach (var lt in lettertypes)
+            {
+                s.Add(lt.Name);
+            }
+            Session.Add("Letter Types SelectList", new SelectList(s));
+
+            // so to setup letters, we can provide a shortcut specifically if the user has proceeded with just having the two default letter types, Consonant and Vowel
+            if (lettertypes.Exists(lt => lt.Name == "Consonant") && lettertypes.Exists(lt => lt.Name == "Vowel"))
+            {
+                List<LetterModel> letters = new List<LetterModel>();
+                letters.Add(new LetterModel { Name = "A", LetterType = "Vowel", Description = "Vowel A", Pronounciation = "ae" });
+                letters.Add(new LetterModel { Name = "E", LetterType = "Vowel", Description = "Vowel E", Pronounciation = "ee" });
+                letters.Add(new LetterModel { Name = "I", LetterType = "Vowel", Description = "Vowel I", Pronounciation = "ai" });
+                letters.Add(new LetterModel { Name = "O", LetterType = "Vowel", Description = "Vowel O", Pronounciation = "ou" });
+                letters.Add(new LetterModel { Name = "U", LetterType = "Vowel", Description = "Vowel U", Pronounciation = "yu" });
+                letters.Add(new LetterModel { Name = "B", LetterType = "Consonant", Description = "Consonant B", Pronounciation = "b" });
+                letters.Add(new LetterModel { Name = "C", LetterType = "Consonant", Description = "Consonant C", Pronounciation = "c" });
+                letters.Add(new LetterModel { Name = "D", LetterType = "Consonant", Description = "Consonant D", Pronounciation = "d" });
+                letters.Add(new LetterModel { Name = "F", LetterType = "Consonant", Description = "Consonant F", Pronounciation = "f" });
+                letters.Add(new LetterModel { Name = "G", LetterType = "Consonant", Description = "Consonant G", Pronounciation = "g" });
+                letters.Add(new LetterModel { Name = "H", LetterType = "Consonant", Description = "Consonant H", Pronounciation = "h" });
+                letters.Add(new LetterModel { Name = "J", LetterType = "Consonant", Description = "Consonant J", Pronounciation = "j" });
+                letters.Add(new LetterModel { Name = "L", LetterType = "Consonant", Description = "Consonant L", Pronounciation = "l" });
+                letters.Add(new LetterModel { Name = "M", LetterType = "Consonant", Description = "Consonant M", Pronounciation = "m" });
+                letters.Add(new LetterModel { Name = "N", LetterType = "Consonant", Description = "Consonant N", Pronounciation = "n" });
+                letters.Add(new LetterModel { Name = "P", LetterType = "Consonant", Description = "Consonant P", Pronounciation = "p" });
+                letters.Add(new LetterModel { Name = "R", LetterType = "Consonant", Description = "Consonant R", Pronounciation = "r" });
+                letters.Add(new LetterModel { Name = "S", LetterType = "Consonant", Description = "Consonant S", Pronounciation = "s" });
+                letters.Add(new LetterModel { Name = "T", LetterType = "Consonant", Description = "Consonant T", Pronounciation = "t" });
+                letters.Add(new LetterModel { Name = "V", LetterType = "Consonant", Description = "Consonant V", Pronounciation = "v" });
+                letters.Add(new LetterModel { Name = "W", LetterType = "Consonant", Description = "Consonant W", Pronounciation = "w" });
+                letters.Add(new LetterModel { Name = "Y", LetterType = "Consonant", Description = "Consonant Y", Pronounciation = "y" });
+                letters.Add(new LetterModel { Name = "Z", LetterType = "Consonant", Description = "Consonant Z", Pronounciation = "z" });
+                Session.Add("Letters", letters);
             }
             // otherwise return the Setup Letters page
             return View();
@@ -461,21 +508,42 @@ namespace LanguageMakerWebProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SetupLetters(List<LetterModel> letters)
+        public ActionResult SetupLetters(LetterModel letter)
         {
-            if (ModelState.IsValid)
-            {
-                // we don't need to check for distinctivity here as this method should never be called when letters already exist
-                foreach (LetterModel l in letters)
-                {
-                    LetterProcessor.CreateLetter(l.Name, (int)Session["Language"], l.Pronounciation, l.Description);
-                }
+            List<LetterModel> letters = (List<LetterModel>)Session["Letter"];
+            letters.Add(letter);
 
-                // the next step is to setup the word patterns
-                return RedirectToAction("SetupWordPatterns", "Language");
-            }
+            // need to clear the values
+            ModelState.SetModelValue("Name", new ValueProviderResult("", "", ModelState["Name"].Value.Culture));
+            ModelState.SetModelValue("Pronounciation", new ValueProviderResult("", "", ModelState["Pronounciation"].Value.Culture));
+            ModelState.SetModelValue("Description", new ValueProviderResult("", "", ModelState["Description"].Value.Culture));
 
             return View();
+        }
+
+        public ActionResult RemoveSetupLetter(string name)
+        {
+            List<LetterModel> letters = (List<LetterModel>)Session["Letters"];
+
+            letters.RemoveAll(l => l.Name == name);
+
+            return RedirectToAction("SetupLetterTypes", "Language");
+        }
+
+        public ActionResult CreateLetters()
+        {
+            // we don't need to check for distinctivity here as this method should never be called when letters already exist
+            List<LetterTypeModel> lettertypes = (List<LetterTypeModel>)Session["Letter Types"];
+            List<LetterModel> letters = (List<LetterModel>)Session["Letters"];
+
+            foreach (LetterModel l in letters)
+            {
+                int lettertypeid = lettertypes.Find(lt => lt.Name == l.LetterType).Id;
+                LetterProcessor.CreateLetter(l.Name, (int)Session["Language"], lettertypeid, l.Pronounciation, l.Description);
+            }
+
+            // the next step is to setup the word patterns
+            return RedirectToAction("SetupWordPatterns", "Language");
         }
 
         public ActionResult SetupWordPatterns()

@@ -1,0 +1,100 @@
+﻿@model LanguageMakerWebProject.Models.LetterModel
+
+@{
+    ViewBag.Title = "SetupLetters";
+}
+
+<h2>Setup Letters</h2>
+
+@{ 
+    List<LanguageMakerWebProject.Models.LetterModel> letters = (List<LanguageMakerWebProject.Models.LetterModel>)Session["Letters"];
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LetterType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pronounciation)
+            </th>
+        </tr>
+
+        @foreach (var letter in letters)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => letter.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => letter.LetterType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => letter.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => letter.Pronounciation)
+                </td>
+            </tr>
+        }
+    </table>
+    
+    <div class="form-horizontal">
+        <h4>LetterModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LetterType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("LetterType", Session["Letter Types SelectList"] as SelectList, "Select Letter Type", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.LetterType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Pronounciation, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Pronounciation, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Pronounciation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add Letter" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Create Letters", "CreateLetters")
+</div>

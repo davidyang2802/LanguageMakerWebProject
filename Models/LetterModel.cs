@@ -15,6 +15,11 @@ namespace LanguageMakerWebProject.Models
         [MaxLength(15, ErrorMessage = "Letter must be at most 15 characters.")]
         public string Name { get; set; }
 
+        [Display(Name = "Letter Type")]
+        [MinLength(1, ErrorMessage = "Letter must be at least one character.")]
+        [MaxLength(30, ErrorMessage = "Letter must be at most 30 characters.")]
+        public string LetterType { get; set; }
+
         [MaxLength(20, ErrorMessage = "Pronounciation must be at most 20 characters.")]
         public string Pronounciation { get; set; }
 

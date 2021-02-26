@@ -46,7 +46,13 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"SELECT Id, Name, LanguageId, Description, Pattern FROM dbo.LetterTypes WHERE LanguageId = @LanguageId;";
             var parameters = new { LanguageId = languageid };
 
-            return SqlDataAccess.LoadData<LetterTypeDataModel>(sql, parameters).ToList();
+            List<LetterTypeDataModel> lettertypes = SqlDataAccess.LoadData<LetterTypeDataModel>(sql, parameters).ToList();
+            foreach (LetterTypeDataModel lt in lettertypes)
+            {
+                lt.Name = lt.Name.TrimEnd();
+            }
+
+            return lettertypes;
         }
 
         /// <summary>
