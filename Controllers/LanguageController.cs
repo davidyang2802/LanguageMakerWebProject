@@ -35,37 +35,22 @@ namespace LanguageMakerWebProject.Controllers
             // check if there are any letter types
             if (LetterTypeProcessor.getLetterTypesCount(languageid) <= 0)
             {
-                // if there aren't any letter types, we need to add an alert and also redirect to the setup letter types page
-                Session.Add("No Letter Types", true);
-                return RedirectToAction("SetupLetterTypes", "Language");
+                return RedirectToAction("LetterTypes", "Language");
             }
             // check if there are any letters
             if (LetterProcessor.getLettersCount(languageid) <= 0)
             {
-                // if there aren't any letters, we need to add an alert and also redirect to the setup letters page
-                Session.Add("No Letters", true);
-                return RedirectToAction("SetupLetters", "Language");
+                return RedirectToAction("Letters", "Language");
             }
             // check if there are any word patterns
             if (WordPatternProcessor.getWordPatternsCount(languageid) <= 0)
             {
-                // if there aren't any word patterns, we need to add an alert and also redirect to the setup word patterns page
-                Session.Add("No Word Patternn", true);
-                return RedirectToAction("SetupWordPatterns", "Language");
+                return RedirectToAction("WordPatterns", "Language");
             }
             // check if there are any classifications
             if (ClassificationProcessor.getClassificationsCount(languageid) <= 0)
             {
-                // if there aren't any classifications, we need to add an alert and also redirect to the setup word patterns page
-                Session.Add("No Classifications", true);
-                return RedirectToAction("SetupClassifications", "Language");
-            }
-            // lastly, check if there are any words
-            if (WordProcessor.getWordsCount(languageid) <= 0)
-            {
-                // if there aren't any words, we need to add an alert and also redirect to the setup words page
-                Session.Add("No Words", true);
-                return RedirectToAction("SetupWords", "Language");
+                return RedirectToAction("Classifications", "Language");
             }
             // otherwise, we'll just go the the words page
             else
@@ -74,6 +59,7 @@ namespace LanguageMakerWebProject.Controllers
             }
         }
 
+        #region Languages
         public ActionResult Languages()
         {
             // the only fail case for this page is if there isn't a User - we can redirect to Index to handle this
@@ -106,234 +92,6 @@ namespace LanguageMakerWebProject.Controllers
 
             // return the view as a table of the languages
             return View(mLanguages);
-        }
-
-        public ActionResult SelectLanguage(LanguageModel language)
-        {
-            // Check if Language is already in Session - if not add it
-            if (Session["Language"] == null)
-            {
-                Session.Add("Language", language.Id);
-            }
-            else
-            {
-                Session["Language"] = language.Id;
-            }
-            // redirect to the regular index method, which will determine where to go
-            return RedirectToAction("Index", "Language");
-        }
-
-        public ActionResult LetterTypes()
-        {
-            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
-            if (Session["User"] == null || Session["Language"] == null)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // check if there are no letter types - if so, we need to redirect to index also
-            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // load the letter types
-            List<LetterTypeDataModel> dmLetterTypes = LetterTypeProcessor.LoadLetterTypes((int)Session["Language"]);
-
-            // create and populate a list of letter types
-            List<LetterTypeModel> mLetterTypes = new List<LetterTypeModel>();
-            foreach (LetterTypeDataModel lettertype in dmLetterTypes)
-            {
-                mLetterTypes.Add(new LetterTypeModel
-                {
-                    Id = lettertype.Id,
-                    Name = lettertype.Name,
-                    Description = lettertype.Description
-                });
-            }
-
-            // return the view as a table of the letter types
-            return View(mLetterTypes);
-        }
-
-        public ActionResult Letters()
-        {
-            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
-            if (Session["User"] == null || Session["Language"] == null)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // check if there are no letter types or letters - if so, we need to redirect to index also
-            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0 ||
-                LetterProcessor.getLettersCount((int)Session["Language"]) <= 0)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // load the letters
-            List<LetterDataModel> dmLetters = LetterProcessor.LoadLetters((int)Session["Language"]);
-
-            // create and populate a list of letters
-            List<LetterModel> mLetters = new List<LetterModel>();
-            foreach (LetterDataModel letter in dmLetters)
-            {
-                mLetters.Add(new LetterModel
-                {
-                    Id = letter.Id,
-                    Name = letter.Name,
-                    Pronounciation = letter.Pronounciation,
-                    Description = letter.Description
-                });
-            }
-
-            // return the view as a table of the letters
-            return View(mLetters);
-        }
-
-        public ActionResult WordPatterns()
-        {
-            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
-            if (Session["User"] == null || Session["Language"] == null)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // check if there are no letter types, letters or word patterns - if so, we need to redirect to index also
-            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0 ||
-                LetterProcessor.getLettersCount((int)Session["Language"]) <= 0 ||
-                WordPatternProcessor.getWordPatternsCount((int)Session["Language"]) <= 0)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // load the word patterns
-            List<WordPatternDataModel> dmWordPatterns = WordPatternProcessor.LoadWordPatterns((int)Session["Language"]);
-
-            // create and populate a list of word patterns
-            List<WordPatternModel> mWordPatterns = new List<WordPatternModel>();
-            foreach (WordPatternDataModel wordpattern in dmWordPatterns)
-            {
-                mWordPatterns.Add(new WordPatternModel
-                {
-                    Id = wordpattern.Id,
-                    Name = wordpattern.Name,
-                    Pattern = wordpattern.Pattern
-                });
-            }
-
-            // return the view as a table of the word patterns
-            return View(mWordPatterns);
-        }
-
-        public ActionResult Classifications()
-        {
-            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
-            if (Session["User"] == null || Session["Language"] == null)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // check if there are no letter types, letters, word patterns or classifications - if so, we need to redirect to index also
-            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0 ||
-                LetterProcessor.getLettersCount((int)Session["Language"]) <= 0 ||
-                WordPatternProcessor.getWordPatternsCount((int)Session["Language"]) <= 0 ||
-                ClassificationProcessor.getClassificationsCount((int)Session["Language"]) <= 0)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // load the classifications
-            List<ClassificationDataModel> dmClassifications = ClassificationProcessor.LoadClassifications((int)Session["Language"]);
-
-            // create and populate a list of classifications
-            List<ClassificationModel> mClassifications = new List<ClassificationModel>();
-            foreach (ClassificationDataModel classification in dmClassifications)
-            {
-                mClassifications.Add(new ClassificationModel
-                {
-                    Id = classification.Id,
-                    Name = classification.Name,
-                    Description = classification.Description
-                });
-            }
-
-            // return the view as a table of the classifications
-            return View(mClassifications);
-        }
-
-        public ActionResult Tags()
-        {
-            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
-            if (Session["User"] == null || Session["Language"] == null)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // check if there are no letter types, letters, word patterns or classifications - if so, we need to redirect to index also
-            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0 ||
-                LetterProcessor.getLettersCount((int)Session["Language"]) <= 0 ||
-                WordPatternProcessor.getWordPatternsCount((int)Session["Language"]) <= 0 ||
-                ClassificationProcessor.getClassificationsCount((int)Session["Language"]) <= 0)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // load the tags
-            List<TagDataModel> dmTags = TagProcessor.LoadTags((int)Session["Language"]);
-
-            // create and populate a list of tags
-            List<TagModel> mTags = new List<TagModel>();
-            foreach (TagDataModel tag in dmTags)
-            {
-                mTags.Add(new TagModel
-                {
-                    Id = tag.Id,
-                    Name = tag.Name,
-                    Description = tag.Description
-                });
-            }
-
-            // return the view as a table of the tags
-            return View(mTags);
-        }
-
-        public ActionResult Words()
-        {
-            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
-            if (Session["User"] == null || Session["Language"] == null)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // check if there are no letter types, letters, word patterns or classifications - if so, we need to redirect to index also
-            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0 ||
-                LetterProcessor.getLettersCount((int)Session["Language"]) <= 0 ||
-                WordPatternProcessor.getWordPatternsCount((int)Session["Language"]) <= 0 ||
-                ClassificationProcessor.getClassificationsCount((int)Session["Language"]) <= 0)
-            {
-                return RedirectToAction("Index", "Language");
-            }
-
-            // load the words
-            List<WordDataModel> dmWords = WordProcessor.LoadWords((int)Session["Language"]);
-
-            // create and populate a list of words
-            List<WordModel> mWords = new List<WordModel>();
-            foreach (WordDataModel word in dmWords)
-            {
-                mWords.Add(new WordModel
-                {
-                    Id = word.Id,
-                    Text = word.Text,
-                    ClassificationId = word.ClassificationId,
-                    Description = word.Description,
-                    Pronounciation = word.Pronounciation
-                });
-            }
-
-            // return the view as a table of the words
-            return View(mWords);
         }
 
         public ActionResult CreateLanguage()
@@ -379,141 +137,244 @@ namespace LanguageMakerWebProject.Controllers
             return View();
         }
 
-        public ActionResult SetupLetterTypes()
+        public ActionResult SelectLanguage(LanguageModel language)
         {
-            // make sure User and Language are selected
+            // Check if Language is already in Session - if not add it
+            if (Session["Language"] == null)
+            {
+                Session.Add("Language", language.Id);
+            }
+            else
+            {
+                Session["Language"] = language.Id;
+            }
+            // redirect to the regular index method, which will determine where to go
+            return RedirectToAction("Index", "Language");
+        }
+        #endregion
+
+        #region Letter Types
+        public ActionResult LetterTypes()
+        {
+            ClearAlerts();
+
+            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
             if (Session["User"] == null || Session["Language"] == null)
             {
                 return RedirectToAction("Index", "Language");
             }
-            // need a check for if letter types already exist - if so we'll redirect to the Letter Types page
-            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) > 0)
+
+            // this page needs to return a list of letter types
+            List<LetterTypeModel> lettertypes = new List<LetterTypeModel>();
+
+            // check if Session already has a letter types object
+            if (Session["Letter Types"] != null)
             {
-                return RedirectToAction("LetterTypes", "Language");
+                lettertypes = (List<LetterTypeModel>)Session["Letter Types"];
+                // now, if the list isn't empty, the page should load it
+                if (lettertypes.Count != 0) { return View(); }
             }
 
-            // check if there are already letter types
-            if (Session["Letter Types"] == null)
+            // otherwise, Session does not have a letter types list object, so we'll instead start checking the database
+
+            // check if there are no letter types in the database
+            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0)
             {
-                List<LetterTypeModel> lettertypes = new List<LetterTypeModel>();
-                lettertypes.Add(new LetterTypeModel { Name = "Consonant", Description = "Basic letter type, such as b, c & d in English", Pattern = 'c' });
-                lettertypes.Add(new LetterTypeModel { Name = "Vowel", Description = "Basic letter type, such as a, e, and i in English", Pattern = 'v' });
-                Session.Add("Letter Types", lettertypes);
+                // if there are no existing letter types, we'll autogenerate two letter types - consonants and vowels
+                LetterTypeProcessor.CreateLetterType("Consonant", (int)Session["Language"], "Basic letter type, such as b, c & d in English", 'c');
+                LetterTypeProcessor.CreateLetterType("Vowel", (int)Session["Language"], "Basic letter type, such as a, e, and i in English", 'v');
+                Session.Add("Alert LetterTypes M1", "There were no existing letter types - Consonant & Vowel have been auto-generated.");
+            }
+            // now load the letter types from the database
+            List<LetterTypeDataModel> dmLetterTypes = LetterTypeProcessor.LoadLetterTypes((int)Session["Language"]);
+            foreach (LetterTypeDataModel lettertype in dmLetterTypes)
+            {
+                lettertypes.Add(new LetterTypeModel
+                {
+                    Id = lettertype.Id,
+                    Name = lettertype.Name,
+                    Description = lettertype.Description
+                });
             }
 
-            // otherwise return the Setup Letter Types page
+            // add the list to Session
+            Session.Add("Letter Types", lettertypes);
+
+            // return the view as a table of the letter types
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SetupLetterTypes(LetterTypeModel lettertype)
+        public ActionResult LetterTypes(LetterTypeModel lettertype)
         {
+            ClearAlerts();
+
+            // get the list of letter types from Session
             List<LetterTypeModel> lettertypes = (List<LetterTypeModel>)Session["Letter Types"];
 
-            lettertypes.Add(lettertype);
+            // we'll need to validate the data
+            if (lettertypes.Exists(lt => lt.Name == lettertype.Name))
+            {
+                Session.Add("Alert LetterTypes M2", "Letter type name already exists. Please use a distinct name.");
+            }
+            if (lettertypes.Exists(lt => lt.Pattern == lettertype.Pattern))
+            {
+                Session.Add("Alert LetterTypes M3", "Letter type pattern already used. Please use a distinct pattern.");
+            }
+            if (Session["Alert LetterTypes M2"] != null || Session["Alert LetterTypes M3"] != null)
+            {
+                return View();
+            }
 
-            // need to clear the values
+            lettertypes.Add(lettertype);
+            LetterTypeProcessor.CreateLetterType(lettertype.Name, (int)Session["Language"], lettertype.Description, lettertype.Pattern);
+
+            // lastly, we'll need to clear the values in the field
             ModelState.SetModelValue("Name", new ValueProviderResult("", "", ModelState["Name"].Value.Culture));
             ModelState.SetModelValue("Description", new ValueProviderResult("", "", ModelState["Description"].Value.Culture));
 
             return View();
         }
 
-        public ActionResult RemoveSetupLetterType(string name)
+        public ActionResult RemoveLetterType(int id)
         {
+            // get the list of letter types from Session
             List<LetterTypeModel> lettertypes = (List<LetterTypeModel>)Session["Letter Types"];
 
-            lettertypes.RemoveAll(lt => lt.Name == name);
+            lettertypes.RemoveAt(lettertypes.FindIndex(lt => lt.Id == id));
 
-            return RedirectToAction("SetupLetterTypes", "Language");
+            LetterTypeProcessor.DeleteLetterType(id);
+
+            return RedirectToAction("LetterTypes", "Language");
         }
+        #endregion
 
-        public ActionResult CreateLetterTypes()
+        #region Letters
+        public ActionResult Letters()
         {
-            List<LetterTypeModel> lettertypes = (List<LetterTypeModel>)Session["Letter Types"];
-
-            foreach (LetterTypeModel lt in lettertypes)
-            {
-                LetterTypeProcessor.CreateLetterType(lt.Name, (int)Session["Language"], lt.Description, lt.Pattern);
-            }
-
-            Session.Remove("Letter Types");
-
-            return RedirectToAction("SetupLetters");
-        }
-
-        public ActionResult SetupLetters()
-        {
-            // make sure User and Language are selected
+            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
             if (Session["User"] == null || Session["Language"] == null)
             {
-                RedirectToAction("Index", "Language");
+                return RedirectToAction("Index", "Language");
             }
 
             int languageid = (int)Session["Language"];
-            // make sure letter types already exist - if they don't, we'll redirect to the setup letter page
+
+            // make sure there are existing letter types
             if (LetterTypeProcessor.getLetterTypesCount(languageid) == 0)
             {
-                RedirectToAction("SetupLetterTypes", "Language");
+                return RedirectToAction("Index", "Language");
             }
-            // need a check for if letters already exist - if so we'll redirect to the Letters page
-            if (LetterProcessor.getLettersCount(languageid) > 0)
+            // we need the list of letter types - this is needed to create a letter as well
+            List<LetterTypeModel> lettertypes = new List<LetterTypeModel>();
+            // check if Session already has the list
+            if (Session["Letter Types"] != null)
             {
-                RedirectToAction("Letters", "Language");
+                lettertypes = (List<LetterTypeModel>)Session["Letter Types"];
+            }
+            // otherwise, we'll need to load the list from the database
+            else
+            {
+                List<LetterTypeDataModel> dmlettertypes = LetterTypeProcessor.LoadLetterTypes(languageid);
+                foreach (var dmlettertype in dmlettertypes)
+                {
+                    lettertypes.Add(new LetterTypeModel { Id = dmlettertype.Id, Name = dmlettertype.Name, Description = dmlettertype.Description, Pattern = dmlettertype.Pattern });
+                }
             }
 
-            // get all the letter types and save to Session - we'll need this
-            List<LetterTypeDataModel> lettertypes = LetterTypeProcessor.LoadLetterTypes(languageid);
-            Session.Add("Letter Types", lettertypes);
-            List<string> s = new List<string>();
-            foreach (var lt in lettertypes)
+            // now do the same for the letters
+            List<LetterModel> letters = new List<LetterModel>();
+            // check if Session already has the list
+            if (Session["Letters"] != null)
             {
-                s.Add(lt.Name);
+                letters = (List<LetterModel>)Session["Letters"];
+                // check if the list has values - if so, we'll return the view
+                if (letters.Count != 0)
+                {
+                    return View(letters);
+                }
             }
-            Session.Add("Letter Types SelectList", new SelectList(s));
 
-            // so to setup letters, we can provide a shortcut specifically if the user has proceeded with just having the two default letter types, Consonant and Vowel
+            // at this point, we know there are letter types and there are no letters, so next we want to check if consonant and vowel exist as letter types
             if (lettertypes.Exists(lt => lt.Name == "Consonant") && lettertypes.Exists(lt => lt.Name == "Vowel"))
             {
-                List<LetterModel> letters = new List<LetterModel>();
-                letters.Add(new LetterModel { Name = "A", LetterType = "Vowel", Description = "Vowel A", Pronounciation = "ae" });
-                letters.Add(new LetterModel { Name = "E", LetterType = "Vowel", Description = "Vowel E", Pronounciation = "ee" });
-                letters.Add(new LetterModel { Name = "I", LetterType = "Vowel", Description = "Vowel I", Pronounciation = "ai" });
-                letters.Add(new LetterModel { Name = "O", LetterType = "Vowel", Description = "Vowel O", Pronounciation = "ou" });
-                letters.Add(new LetterModel { Name = "U", LetterType = "Vowel", Description = "Vowel U", Pronounciation = "yu" });
-                letters.Add(new LetterModel { Name = "B", LetterType = "Consonant", Description = "Consonant B", Pronounciation = "b" });
-                letters.Add(new LetterModel { Name = "C", LetterType = "Consonant", Description = "Consonant C", Pronounciation = "c" });
-                letters.Add(new LetterModel { Name = "D", LetterType = "Consonant", Description = "Consonant D", Pronounciation = "d" });
-                letters.Add(new LetterModel { Name = "F", LetterType = "Consonant", Description = "Consonant F", Pronounciation = "f" });
-                letters.Add(new LetterModel { Name = "G", LetterType = "Consonant", Description = "Consonant G", Pronounciation = "g" });
-                letters.Add(new LetterModel { Name = "H", LetterType = "Consonant", Description = "Consonant H", Pronounciation = "h" });
-                letters.Add(new LetterModel { Name = "J", LetterType = "Consonant", Description = "Consonant J", Pronounciation = "j" });
-                letters.Add(new LetterModel { Name = "L", LetterType = "Consonant", Description = "Consonant L", Pronounciation = "l" });
-                letters.Add(new LetterModel { Name = "M", LetterType = "Consonant", Description = "Consonant M", Pronounciation = "m" });
-                letters.Add(new LetterModel { Name = "N", LetterType = "Consonant", Description = "Consonant N", Pronounciation = "n" });
-                letters.Add(new LetterModel { Name = "P", LetterType = "Consonant", Description = "Consonant P", Pronounciation = "p" });
-                letters.Add(new LetterModel { Name = "R", LetterType = "Consonant", Description = "Consonant R", Pronounciation = "r" });
-                letters.Add(new LetterModel { Name = "S", LetterType = "Consonant", Description = "Consonant S", Pronounciation = "s" });
-                letters.Add(new LetterModel { Name = "T", LetterType = "Consonant", Description = "Consonant T", Pronounciation = "t" });
-                letters.Add(new LetterModel { Name = "V", LetterType = "Consonant", Description = "Consonant V", Pronounciation = "v" });
-                letters.Add(new LetterModel { Name = "W", LetterType = "Consonant", Description = "Consonant W", Pronounciation = "w" });
-                letters.Add(new LetterModel { Name = "Y", LetterType = "Consonant", Description = "Consonant Y", Pronounciation = "y" });
-                letters.Add(new LetterModel { Name = "Z", LetterType = "Consonant", Description = "Consonant Z", Pronounciation = "z" });
-                Session.Add("Letters", letters);
+                int consonantid = lettertypes.Find(lt => lt.Name == "Consonant").Id;
+                int vowelid = lettertypes.Find(lt => lt.Name == "Vowel").Id;
+
+                // create some letters to the database
+                LetterProcessor.CreateLetter("A", languageid, vowelid, "ae", "Vowel A");
+                LetterProcessor.CreateLetter("E", languageid, vowelid, "ee", "Vowel E");
+                LetterProcessor.CreateLetter("I", languageid, vowelid, "ai", "Vowel I");
+                LetterProcessor.CreateLetter("O", languageid, vowelid, "ou", "Vowel O");
+                LetterProcessor.CreateLetter("U", languageid, vowelid, "yu", "Vowel U");
+                LetterProcessor.CreateLetter("B", languageid, consonantid, "b", "Consonant B");
+                LetterProcessor.CreateLetter("C", languageid, consonantid, "c", "Consonant C");
+                LetterProcessor.CreateLetter("D", languageid, consonantid, "d", "Consonant D");
+                LetterProcessor.CreateLetter("F", languageid, consonantid, "f", "Consonant F");
+                LetterProcessor.CreateLetter("G", languageid, consonantid, "g", "Consonant G");
+                LetterProcessor.CreateLetter("H", languageid, consonantid, "h", "Consonant H");
+                LetterProcessor.CreateLetter("J", languageid, consonantid, "j", "Consonant J");
+                LetterProcessor.CreateLetter("L", languageid, consonantid, "l", "Consonant L");
+                LetterProcessor.CreateLetter("M", languageid, consonantid, "m", "Consonant M");
+                LetterProcessor.CreateLetter("N", languageid, consonantid, "n", "Consonant N");
+                LetterProcessor.CreateLetter("P", languageid, consonantid, "p", "Consonant P");
+                LetterProcessor.CreateLetter("R", languageid, consonantid, "r", "Consonant R");
+                LetterProcessor.CreateLetter("S", languageid, consonantid, "s", "Consonant S");
+                LetterProcessor.CreateLetter("T", languageid, consonantid, "t", "Consonant T");
+                LetterProcessor.CreateLetter("V", languageid, consonantid, "v", "Consonant V");
+                LetterProcessor.CreateLetter("W", languageid, consonantid, "w", "Consonant W");
+                LetterProcessor.CreateLetter("Y", languageid, consonantid, "y", "Consonant Y");
+                LetterProcessor.CreateLetter("Z", languageid, consonantid, "z", "Consonant Z");
+
+                // now load the letters we just created - we do it this way so that we have the correct id
+                List<LetterDataModel> dmLetters = LetterProcessor.LoadLetters(languageid);
+
+                // now populate letters
+                foreach (LetterDataModel letter in dmLetters)
+                {
+                    letters.Add(new LetterModel
+                    {
+                        Id = letter.Id,
+                        Name = letter.Name,
+                        Pronounciation = letter.Pronounciation,
+                        Description = letter.Description
+                    });
+                }
+
+                // lastly, add an alert
+                Session.Add("Alert Letters M1", "Default letters have been added as vowels and consonants. Remove if unwanted.");
             }
-            // otherwise return the Setup Letters page
-            return View();
+            else
+            {
+                Session.Add("Alert Letters M2", "You have no letters. Please create your own letters based on your letter types.")
+            }
+
+            // return the view as a table of the letters - note that if we didn't have the consonant and vowel letter types, we're returning an empty list
+            return View(letters);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SetupLetters(LetterModel letter)
+        public ActionResult Letters(LetterModel letter)
         {
-            List<LetterModel> letters = (List<LetterModel>)Session["Letter"];
-            letters.Add(letter);
+            ClearAlerts();
+            // get the list of letters from Session
+            List<LetterModel> letters = (List<LetterModel>)Session["Letters"];
 
-            // need to clear the values
+            // we'll need to validate the data
+            if (letters.Exists(l => l.Name == letter.Name))
+            {
+                Session.Add("Alert Letters M3", "Letter name is already used. Please change the letter name.");
+                return View();
+            }
+
+            letters.Add(letter);
+            List<LetterTypeModel> lettertypes = (List<LetterTypeModel>)Session["Letter Types"];
+            int lettertypeid = lettertypes.Find(lt => lt.Name == letter.LetterType).Id;
+            LetterProcessor.CreateLetter(letter.Name, (int)Session["Language"], lettertypeid, letter.Pronounciation, letter.Description);
+
+            // lastly, we'll need to clear the values in the field
             ModelState.SetModelValue("Name", new ValueProviderResult("", "", ModelState["Name"].Value.Culture));
             ModelState.SetModelValue("Pronounciation", new ValueProviderResult("", "", ModelState["Pronounciation"].Value.Culture));
             ModelState.SetModelValue("Description", new ValueProviderResult("", "", ModelState["Description"].Value.Culture));
@@ -521,176 +382,232 @@ namespace LanguageMakerWebProject.Controllers
             return View();
         }
 
-        public ActionResult RemoveSetupLetter(string name)
+        public ActionResult RemoveLetter(int id)
         {
+            // get the list of letters from Session
             List<LetterModel> letters = (List<LetterModel>)Session["Letters"];
 
-            letters.RemoveAll(l => l.Name == name);
+            letters.RemoveAt(letters.FindIndex(l => l.Id == id));
 
-            return RedirectToAction("SetupLetterTypes", "Language");
+            LetterProcessor.DeleteLetter(id);
+
+            return RedirectToAction("Letters", "Language");
         }
+        #endregion
 
-        public ActionResult CreateLetters()
+        #region Classifications
+        public ActionResult Classifications()
         {
-            // we don't need to check for distinctivity here as this method should never be called when letters already exist
-            List<LetterTypeModel> lettertypes = (List<LetterTypeModel>)Session["Letter Types"];
-            List<LetterModel> letters = (List<LetterModel>)Session["Letters"];
+            ClearAlerts();
 
-            foreach (LetterModel l in letters)
-            {
-                int lettertypeid = lettertypes.Find(lt => lt.Name == l.LetterType).Id;
-                LetterProcessor.CreateLetter(l.Name, (int)Session["Language"], lettertypeid, l.Pronounciation, l.Description);
-            }
-
-            // the next step is to setup the word patterns
-            return RedirectToAction("SetupWordPatterns", "Language");
-        }
-
-        public ActionResult SetupWordPatterns()
-        {
-            // make sure User and Language are selected
+            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
             if (Session["User"] == null || Session["Language"] == null)
             {
-                RedirectToAction("Index", "Language");
+                return RedirectToAction("Index", "Language");
             }
-            // need a check for if letter types already exist - if so we'll redirect to the Letters page
-            if (LetterProcessor.getLettersCount((int)Session["Language"]) > 0)
+
+            // this page needs to return a list of classifications
+            List<ClassificationModel> classifications = new List<ClassificationModel>();
+
+            // check if Session already has a list of classifications
+            if (Session["Classifications"] != null)
             {
-                RedirectToAction("Letters", "Language");
+                classifications = (List<ClassificationModel>)Session["Classifications"];
+                // now check if there are any classifications in that list - if so, return the view as that list
+                if (classifications.Count > 0)
+                {
+                    return View(classifications);
+                }
             }
-            // otherwise return the Setup Letters page
-            return View();
+
+            // now check the database for classifications
+            int languageid = (int)Session["Language"];
+            if (ClassificationProcessor.getClassificationsCount(languageid) == 0)
+            {
+                // if there are no existing classifications, we'll create a few automatic classifications for the user and add an alert
+                ClassificationProcessor.CreateClassification("Noun", languageid, "A word for any entity, such as a person, an object, a place - even non-physical - an idea, a system, etc.");
+                ClassificationProcessor.CreateClassification("Verb", languageid, "A word for any action, such as move, do, run, hit, climb, work, press, poke, etc.");
+                ClassificationProcessor.CreateClassification("Adjective", languageid, "A word for any description, such as small, big, fast, red, blue, thin, fat, pleasant, mean, etc.");
+                ClassificationProcessor.CreateClassification("Article", languageid, "A word used to describe a noun as specific or unspecific. In english they are the, a and an.");
+                Session.Add("Alert Classifications M1", "The word classifications noun, verb, adjective and article have been automatically added. Please note that you do not have to use these.");
+            }
+            // now load the classifications from the database and populate the list
+            List<ClassificationDataModel> dmClassifications = ClassificationProcessor.LoadClassifications(languageid);
+            foreach (ClassificationDataModel classification in dmClassifications)
+            {
+                classifications.Add(new ClassificationModel
+                {
+                    Id = classification.Id,
+                    Name = classification.Name,
+                    Description = classification.Description
+                });
+            }
+
+            // return the view as a table of the classifications
+            return View(classifications);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SetupWordPatterns(List<WordPatternModel> wordpatterns)
+        public ActionResult Classifications(ClassificationModel classification)
         {
-            if (ModelState.IsValid)
-            {
-                // we don't need to check for distinctivity here as this method should never be called when word patterns already exist
-                foreach (WordPatternModel wp in wordpatterns)
-                {
-                    WordPatternProcessor.CreateWordPattern(wp.Name, wp.Pattern, (int)Session["Language"]);
-                }
+            ClearAlerts();
 
-                // the next step is to setup the classifications
-                return RedirectToAction("SetupClassifications", "Language");
+            // get the list of classifications from Session
+            List<ClassificationModel> classifications = (List<ClassificationModel>)Session["Classifications"];
+
+            // we'll need to validate the data
+            if (classifications.Exists(c => c.Name == classification.Name))
+            {
+                Session.Add("Alert Classifications M2", "Classification name already exists. Please use a distince name.");
+                return View();
             }
+
+            // we need to add the classification to the database first to get the Id
+            classification.Id = ClassificationProcessor.CreateClassification(classification.Name, (int)Session["Language"], classification.Description);
+            classifications.Add(classification);
+
+            // lastly, we'll need to clear the values in the fields
+            ModelState.SetModelValue("Name", new ValueProviderResult("", "", ModelState["Name"].Value.Culture));
+            ModelState.SetModelValue("Description", new ValueProviderResult("", "", ModelState["Description"].Value.Culture));
 
             return View();
         }
 
-        public ActionResult SetupClassifications()
+        public ActionResult RemoveClassification(int id)
         {
-            // make sure User and Language are selected
+            // get the list of classifications from Session
+            List<ClassificationModel> classifications = (List<ClassificationModel>)Session["Classifications"];
+
+            classifications.RemoveAt(classifications.FindIndex(c => c.Id == id));
+
+            ClassificationProcessor.DeleteClassification(id);
+
+            return RedirectToAction("Classifications", "Language");
+        }
+        #endregion
+
+        #region WordPatterns
+
+        public ActionResult WordPatterns()
+        {
+            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
             if (Session["User"] == null || Session["Language"] == null)
             {
-                RedirectToAction("Index", "Language");
+                return RedirectToAction("Index", "Language");
             }
-            // need a check for if classifications already exist - if so we'll redirect to the Classifications page
-            if (ClassificationProcessor.getClassificationsCount((int)Session["Language"]) > 0)
-            {
-                RedirectToAction("Classifications", "Language");
-            }
-            // otherwise return the Setup Classifications page
-            return View();
-        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult SetupClassifications(List<ClassificationModel> classifications)
-        {
-            if (ModelState.IsValid)
+            // check if there are no letter types, letters or word patterns - if so, we need to redirect to index also
+            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0 ||
+                LetterProcessor.getLettersCount((int)Session["Language"]) <= 0 ||
+                WordPatternProcessor.getWordPatternsCount((int)Session["Language"]) <= 0)
             {
-                // we don't need to check for distinctivity here as this method should never be called when classifications already exist
-                foreach (ClassificationModel c in classifications)
+                return RedirectToAction("Index", "Language");
+            }
+
+            // load the word patterns
+            List<WordPatternDataModel> dmWordPatterns = WordPatternProcessor.LoadWordPatterns((int)Session["Language"]);
+
+            // create and populate a list of word patterns
+            List<WordPatternModel> mWordPatterns = new List<WordPatternModel>();
+            foreach (WordPatternDataModel wordpattern in dmWordPatterns)
+            {
+                mWordPatterns.Add(new WordPatternModel
                 {
-                    ClassificationProcessor.CreateClassfication(c.Name, (int)Session["Language"], c.Description);
-                }
-
-                // the next step is to setup tags
-                return RedirectToAction("SetupTags", "Language");
+                    Id = wordpattern.Id,
+                    Name = wordpattern.Name,
+                    Pattern = wordpattern.Pattern
+                });
             }
 
-            return View();
+            // return the view as a table of the word patterns
+            return View(mWordPatterns);
         }
+        #endregion
 
-        public ActionResult SetupTags()
+        #region Tags
+        public ActionResult Tags()
         {
-            // make sure User and Language are selected
+            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
             if (Session["User"] == null || Session["Language"] == null)
             {
-                RedirectToAction("Index", "Language");
+                return RedirectToAction("Index", "Language");
             }
-            // need a check for if tags already exist - if so redirect to the Tags page
-            if (TagProcessor.getTagsCount((int)Session["Language"]) > 0)
-            {
-                RedirectToAction("Tags", "Language");
-            }
-            // otherwise return the Setup Tags page
-            return View();
-        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult SetupTags(List<TagModel> tags)
-        {
-            if (ModelState.IsValid)
+            // check if there are no letter types, letters, word patterns or classifications - if so, we need to redirect to index also
+            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0 ||
+                LetterProcessor.getLettersCount((int)Session["Language"]) <= 0 ||
+                WordPatternProcessor.getWordPatternsCount((int)Session["Language"]) <= 0 ||
+                ClassificationProcessor.getClassificationsCount((int)Session["Language"]) <= 0)
             {
-                // we don't need to check for distinctivity here as this method should never be called when tags already exist
-                foreach (TagModel t in tags)
+                return RedirectToAction("Index", "Language");
+            }
+
+            // load the tags
+            List<TagDataModel> dmTags = TagProcessor.LoadTags((int)Session["Language"]);
+
+            // create and populate a list of tags
+            List<TagModel> mTags = new List<TagModel>();
+            foreach (TagDataModel tag in dmTags)
+            {
+                mTags.Add(new TagModel
                 {
-                    TagProcessor.CreateTag(t.Name, (int)Session["Language"], t.Description);
-                }
-
-                // the next step is to setup recommended words
-                return RedirectToAction("SetupRecommendedWords", "Language");
+                    Id = tag.Id,
+                    Name = tag.Name,
+                    Description = tag.Description
+                });
             }
 
-            return View();
+            // return the view as a table of the tags
+            return View(mTags);
         }
+        #endregion
 
-        public ActionResult SetupRecommendedWords()
+        #region Words
+        public ActionResult Words()
         {
-            // make sure User and Language are selected
+            // the fail cases for this page is if there isn't a User or a language isn't selected - redirect to Index
             if (Session["User"] == null || Session["Language"] == null)
             {
-                RedirectToAction("Index", "Language");
+                return RedirectToAction("Index", "Language");
             }
-            // need a check for if words already exist - if so redirect to the Words page
-            if (WordProcessor.getWordsCount((int)Session["Language"]) > 0)
-            {
-                RedirectToAction("Words", "Language");
-            }
-            // otherwise return the Setup Words page
-            return View();
-        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult SetupRecomendedWords(List<WordModel> words)
-        {
-            if (ModelState.IsValid)
+            // check if there are no letter types, letters, word patterns or classifications - if so, we need to redirect to index also
+            if (LetterTypeProcessor.getLetterTypesCount((int)Session["Language"]) <= 0 ||
+                LetterProcessor.getLettersCount((int)Session["Language"]) <= 0 ||
+                WordPatternProcessor.getWordPatternsCount((int)Session["Language"]) <= 0 ||
+                ClassificationProcessor.getClassificationsCount((int)Session["Language"]) <= 0)
             {
-                // we don't need to check for distinctivity here as this method should never be called when words already exist
-                foreach (WordModel w in words)
+                return RedirectToAction("Index", "Language");
+            }
+
+            // load the words
+            List<WordDataModel> dmWords = WordProcessor.LoadWords((int)Session["Language"]);
+
+            // create and populate a list of words
+            List<WordModel> mWords = new List<WordModel>();
+            foreach (WordDataModel word in dmWords)
+            {
+                mWords.Add(new WordModel
                 {
-                    WordProcessor.CreateWord(w.Text, (int)Session["Language"], w.ClassificationId, w.Description, w.Pronounciation);
-                }
-
-                // setup is complete here so redirect to the words page
-                return RedirectToAction("Words", "Language");
+                    Id = word.Id,
+                    Text = word.Text,
+                    ClassificationId = word.ClassificationId,
+                    Description = word.Description,
+                    Pronounciation = word.Pronounciation
+                });
             }
 
-            return View();
+            // return the view as a table of the words
+            return View(mWords);
         }
+        #endregion
 
         private void ClearAlerts()
         {
             foreach (string key in Session.Keys)
             {
-                if (key != "User" && key != "Language")
+                if (key.StartsWith("Alert"))
                 {
                     Session.Remove(key);
                 }

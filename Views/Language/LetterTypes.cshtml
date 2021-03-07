@@ -1,25 +1,28 @@
 ﻿@model LanguageMakerWebProject.Models.LetterTypeModel
 
 @{
-    ViewBag.Title = "SetupLetterTypes";
+    ViewBag.Title = "LetterTypes";
 }
 
-<h2>Setup Letter Types</h2>
+<h2>Letter Types</h2>
 
 <p class="lead">
-    The first step to create a language would be to identify what types of letters will be used.
-    In the english language, we simply the letter types as vowel and consonants, which will be the default letter types recommended.
+    Letter types are required to create words, as they will be used in word patterns.
+    Each letter type must be assigned a distinct pattern, which will be used to create word patterns.
+    Finally, words will be generated based on word patterns.
 </p>
+
 <p class="lead">
-    As the language creator, you have the option to make your language more intricate by using more letter types.
-    Keep in mind that the letter types will be arranged into word patterns, and having more letter types allows for more complex word pattern rules.
-</p>
-<p class="lead">
-    So for example, if we have vowels as 'v', consonants as 'c', and another letter type for other consonants as 'd', we can specify these patterns:
+    So for example, if we have two letter types, "vowel" with pattern 'v' and "consonant" with pattern 'c', we can specify these patterns:
 </p>
 <p class="lead">
     'v', 'c v', 'd v', 'v c', 'v d', 'v c d', 'c v d', etc.
 </p>
+
+@if (Session["Alert LetterTypes M1"] != null)
+{
+    <div class="alert-dismissable" role="alert">@Session["Alert LetterTypes M1"]</div>
+}
 
 @{
     List<LanguageMakerWebProject.Models.LetterTypeModel> lettertypes = (List<LanguageMakerWebProject.Models.LetterTypeModel>)Session["Letter Types"];
@@ -56,15 +59,17 @@
                     @Html.DisplayFor(modelItem => lettertype.Pattern)
                 </td>
                 <td>
-                    @Html.ActionLink("Remove", "RemoveSetupLetterType", new { lettertype.Name })
+                    @Html.ActionLink("Edit", "EditLetterType", "Language")
+                </td>
+                <td>
+                    @Html.ActionLink("Remove", "RemoveLetterType", new { lettertype.Id })
                 </td>
             </tr>
         }
-
     </table>
 
     <div class="form-horizontal">
-        <h4>Add a Letter Type</h4>
+        <h4>LetterTypeModel</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -72,6 +77,10 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @if (Session["Alert LetterTypes M2"] != null)
+                {
+                    <div class="alert-warning" role="alert">@Session["Alert LetterTypes M2"]</div>
+                }
             </div>
         </div>
 
@@ -88,6 +97,10 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Pattern, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Pattern, "", new { @class = "text-danger" })
+                @if (Session["Alert LetterTypes M3"] != null)
+                {
+                    <div class="alert-warning" role="alert">@Session["Alert LetterTypes M3"]</div>
+                }
             </div>
         </div>
 
@@ -96,9 +109,9 @@
                 <input type="submit" value="Add Letter Type" class="btn btn-default" />
             </div>
         </div>
-
-        <div>
-            @Html.ActionLink("Create Letter Types", "CreateLetterTypes")
-        </div>
     </div>
 }
+
+<div>
+    @Html.ActionLink("Continue Setup", "Index", "Language")
+</div>

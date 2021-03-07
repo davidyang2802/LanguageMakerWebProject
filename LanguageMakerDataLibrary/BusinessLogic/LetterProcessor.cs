@@ -61,5 +61,17 @@ namespace LanguageMakerDataLibrary.BusinessLogic
 
             return SqlDataAccess.getTableCount(sql);
         }
+
+        /// <summary>
+        /// Method to delete a letter based on the id
+        /// </summary>
+        /// <param name="letterid">Letter Id</param>
+        /// <returns>Returns the number of records changed</returns>
+        public static int DeleteLetter(int letterid)
+        {
+            string sql = "DELETE FROM dbo.Letters WHERE Id = @LetterId";
+
+            return SqlDataAccess.UpdateData(sql, new { LetterId = letterid });
+        }
     }
 }

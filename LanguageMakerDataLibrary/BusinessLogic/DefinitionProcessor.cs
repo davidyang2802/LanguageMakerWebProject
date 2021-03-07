@@ -18,18 +18,25 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// <param name="text">Text of the definition</param>
         /// <param name="wordid">Word Id associated with the definition</param>
         /// <returns>Returns the number of records changed</returns>
-        public static int CreateDefinition(string text, int wordid)
+        public static int CreateDefinition(string text, int wordid, int languageid)
         {
             DefinitionDataModel data = new DefinitionDataModel
             {
                 Text = text,
-                WordId = wordid
+                WordId = wordid,
+                LanguageId = languageid
             };
 
-            string sql = @"INSERT INTO dbo.Definitions (Text, WordId)
-                           VALUES (@Text, @WordId);";
+            string sql = @"INSERT INTO dbo.Definitions (Text, WordId, LanguageId)
+                           VALUES (@Text, @WordId, @LanguageId);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = "SELECT * FROM dbo.Definitions WHERE Text = @Text AND LanguageId = @LanguageId;";
+
+            DefinitionDataModel definition = SqlDataAccess.GetFirstTableDataFromParameters<DefinitionDataModel>(sql, new { Text = text, LanguageId = languageid });
+
+            return definition.Id;
         }
 
         /// <summary>
@@ -39,9 +46,21 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// <returns>Returns a list of DefinitionDataModel objects</returns>
         public static List<DefinitionDataModel> LoadDefinitions(int wordid)
         {
-            string sql = @"SELECT Id, Text, WordId FROM dbo.Definitions;";
+            string sql = @"SELECT Id, Text, WordId, LanguageId FROM dbo.Definitions;";
 
             return SqlDataAccess.LoadData<DefinitionDataModel>(sql).ToList();
+        }
+
+        /// <summary>
+        /// Method to delete a definition based on the id
+        /// </summary>
+        /// <param name="definitionid">Definition Id</param>
+        /// <returns>Returns the number of records changed</returns>
+        public static int DeleteDefinition(int definitionid)
+        {
+            string sql = "DELETE FROM dbo.Definitions WHERE Id = @DefinitionId;";
+
+            return SqlDataAccess.UpdateData(sql, new { DefinitionId = definitionid });
         }
     }
 }

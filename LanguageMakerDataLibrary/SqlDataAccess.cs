@@ -117,5 +117,19 @@ namespace LanguageMakerDataLibrary
                 return cnn.QuerySingle<T>(sql, parameters);
             }
         }
+
+        /// <summary>
+        /// Method to update table data row, based on the SQL statement passed as sql and parameters passed as an object
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static int UpdateData(string sql, object parameters)
+        {
+            using (IDbConnection cnn = new SqlConnection(getConnectionString()))
+            {
+                return cnn.Execute(sql, parameters);
+            }
+        }
     }
 }

@@ -66,5 +66,17 @@ namespace LanguageMakerDataLibrary.BusinessLogic
 
             return SqlDataAccess.getTableCount(sql);
         }
+
+        /// <summary>
+        /// Method to delete a letter type based on the id
+        /// </summary>
+        /// <param name="lettertypeid">Letter type Id</param>
+        /// <returns>Returns the number of records changed</returns>
+        public static int DeleteLetterType(int lettertypeid)
+        {
+            string sql = "DELETE FROM dbo.LetterTypes WHERE Id = @LetterTypeId;";
+
+            return SqlDataAccess.UpdateData(sql, new { LetterTypeId = lettertypeid });
+        }
     }
 }

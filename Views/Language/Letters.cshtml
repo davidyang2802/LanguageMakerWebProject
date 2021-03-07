@@ -1,12 +1,12 @@
 ﻿@model LanguageMakerWebProject.Models.LetterModel
 
 @{
-    ViewBag.Title = "SetupLetters";
+    ViewBag.Title = "Letters";
 }
 
-<h2>Setup Letters</h2>
+<h2>Letters</h2>
 
-@{ 
+@{
     List<LanguageMakerWebProject.Models.LetterModel> letters = (List<LanguageMakerWebProject.Models.LetterModel>)Session["Letters"];
 }
 
@@ -45,16 +45,20 @@
                 <td>
                     @Html.DisplayFor(modelItem => letter.Pronounciation)
                 </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditLetter", "Language")
+                </td>
+                <td>
+                    @Html.ActionLink("Remove", "RemoveLetter", new { letter.Id })
+                </td>
             </tr>
         }
     </table>
-    
+
     <div class="form-horizontal">
         <h4>LetterModel</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -89,12 +93,12 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Add Letter" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Create Letters", "CreateLetters")
+    @Html.ActionLink("Continue Setup", "Index", "Language")
 </div>

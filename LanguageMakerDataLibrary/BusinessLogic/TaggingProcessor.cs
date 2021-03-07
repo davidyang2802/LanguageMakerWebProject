@@ -38,5 +38,18 @@ namespace LanguageMakerDataLibrary.BusinessLogic
 
             return SqlDataAccess.LoadData<TaggingDataModel>(sql).ToList();
         }
+
+        /// <summary>
+        /// Method to delete a tagging based on the word Id & tag Id
+        /// </summary>
+        /// <param name="wordid">Word Id</param>
+        /// <param name="tagid">Tag Id</param>
+        /// <returns>Returns the number of records changed</returns>
+        public static int DeleteTagging(int wordid, int tagid)
+        {
+            string sql = "DELETE FROM dbo.Taggins WHERE WordId = @WordId AND TagId = @TagId;";
+
+            return SqlDataAccess.UpdateData(sql, new { WordId = wordid, TagId = tagid });
+        }
     }
 }

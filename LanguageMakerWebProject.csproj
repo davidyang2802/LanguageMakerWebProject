@@ -178,9 +178,13 @@
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\Language\Languages.cshtml" />
     <Content Include="Views\Language\CreateLanguage.cshtml" />
-    <Content Include="Views\Language\SetupLetterTypes.cshtml" />
-    <Content Include="Views\Language\SetupLetters.cshtml" />
     <Content Include="Views\Language\SetupWordPatterns.cshtml" />
+    <Content Include="Views\Language\LetterTypes.cshtml" />
+    <Content Include="Views\Language\Letters.cshtml" />
+    <Content Include="Views\Language\WordPatterns.cshtml" />
+    <Content Include="Views\Language\Classifications.cshtml" />
+    <Content Include="Views\Language\Tags.cshtml" />
+    <Content Include="Views\Language\Words.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

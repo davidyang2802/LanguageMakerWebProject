@@ -18,8 +18,8 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// <param name="name">Name of the classification</param>
         /// <param name="languageid">Language Id associated with the classification</param>
         /// <param name="description">Description of the classification</param>
-        /// <returns>Returns the number of records changed</returns>
-        public static int CreateClassfication(string name, int languageid, string description)
+        /// <returns>Returns the Id of the new classification</returns>
+        public static int CreateClassification(string name, int languageid, string description)
         {
             ClassificationDataModel data = new ClassificationDataModel
             {
@@ -31,7 +31,13 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"INSERT INTO dbo.Classifications (Name, LanguageId, Description)
                            VALUES (@Name, @LanguageId, @Description);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = @"SELECT * FROM dbo.Classification WHERE Name = @Name AND LanguageId = @LanguageId;";
+
+            ClassificationDataModel classification = SqlDataAccess.GetFirstTableDataFromParameters<ClassificationDataModel>(sql, new { Name = name, LanguageId = languageid });
+
+            return classification.Id;
         }
 
         /// <summary>
@@ -58,5 +64,18 @@ namespace LanguageMakerDataLibrary.BusinessLogic
 
             return SqlDataAccess.getTableCount(sql);
         }
+
+        /// <summary>
+        /// Method to delete a classification based on the id
+        /// </summary>
+        /// <param name="classificationid">Classification Id</param>
+        /// <returns>Returns the number of records changed</returns>
+        public static int DeleteClassification(int classificationid)
+        {
+            string sql = "DELETE FROM dbo.Classifications WHERE Id = @ClassificationId;";
+
+            return SqlDataAccess.UpdateData(sql, new { ClassificationId = classificationid });
+        }
     }
+}
 }

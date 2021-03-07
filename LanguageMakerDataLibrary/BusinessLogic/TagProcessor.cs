@@ -58,5 +58,17 @@ namespace LanguageMakerDataLibrary.BusinessLogic
 
             return SqlDataAccess.getTableCount(sql);
         }
+
+        /// <summary>
+        /// Method to delete a tag based on the id
+        /// </summary>
+        /// <param name="tagid">Tag Id</param>
+        /// <returns>Returns the number of records changed</returns>
+        public static int DeleteTag(int tagid)
+        {
+            string sql = "DELETE FROM dbo.Tags WHERE Id = @TagId;";
+
+            return SqlDataAccess.UpdateData(sql, new { TagId = tagid });
+        }
     }
 }

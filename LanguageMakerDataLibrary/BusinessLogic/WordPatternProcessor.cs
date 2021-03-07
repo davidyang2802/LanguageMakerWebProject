@@ -58,5 +58,17 @@ namespace LanguageMakerDataLibrary.BusinessLogic
 
             return SqlDataAccess.getTableCount(sql);
         }
+
+        /// <summary>
+        /// Method to delete a word pattern based on the id
+        /// </summary>
+        /// <param name="wordpatternid">Word pattern Id</param>
+        /// <returns>Returns the number of records changed</returns>
+        public static int DeleteWordPattern(int wordpatternid)
+        {
+            string sql = "DELETE FROM dbo.WordPatterns WHERE Id = @WordPatternId;";
+
+            return SqlDataAccess.UpdateData(sql, new { WordPatternId = wordpatternid });
+        }
     }
 }
