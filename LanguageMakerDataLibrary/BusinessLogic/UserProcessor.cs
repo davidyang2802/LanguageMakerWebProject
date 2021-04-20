@@ -16,7 +16,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// Method to add a user to the database
         /// </summary>
         /// <param name="username">Username</param>
-        /// <returns>Returns the number of records changed</returns>
+        /// <returns>Returns the Id of the new user</returns>
         public static int CreateUser(string username)
         {
             UserDataModel data = new UserDataModel
@@ -27,7 +27,13 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"INSERT INTO dbo.Users (Username)
                            VALUES (@Username);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = "SELECT * FROM dbo.Users WHERE Username = @Username;";
+
+            data = SqlDataAccess.GetFirstTableDataFromParameters<UserDataModel>(sql, new { Username = username });
+
+            return data.Id;
         }
 
         /// <summary>

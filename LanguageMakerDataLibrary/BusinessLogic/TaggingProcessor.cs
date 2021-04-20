@@ -17,7 +17,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// </summary>
         /// <param name="wordid">Word Id associated with the tagging</param>
         /// <param name="tagid">Tag Id associated with the tagging</param>
-        /// <returns>Returns the number of records changed</returns>
+        /// <returns>Returns the Id of the new tagging</returns>
         public static int CreateTagging(int wordid, int tagid)
         {
             TaggingDataModel data = new TaggingDataModel
@@ -29,7 +29,13 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"INSERT INTO dbo.Taggings (WordId, TagId)
                            VALUES (@Name, @LanguageId);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = "SELECT * FROM dbo.Taggings WHERE WordId = @WordId AND TagId = @TagId;";
+
+            data = SqlDataAccess.GetFirstTableDataFromParameters<TaggingDataModel>(sql, new { WordId = wordid, TagId = tagid });
+
+            return data.Id;
         }
 
         public static List<TaggingDataModel> LoadTaggings()

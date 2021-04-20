@@ -19,7 +19,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// <param name="languageid">Language Id associated with the letter</param>
         /// <param name="pronounciation">Pronounciation of the letter</param>
         /// <param name="description">Description of the letter</param>
-        /// <returns>Returns the number of records changed</returns>
+        /// <returns>Returns the Id of the new letter</returns>
         public static int CreateLetter(string name, int languageid, int lettertypeid, string pronounciation, string description)
         {
             LetterDataModel data = new LetterDataModel
@@ -31,10 +31,16 @@ namespace LanguageMakerDataLibrary.BusinessLogic
                 Description = description
             };
 
-            string sql = @"INSERT INTO dbo.Letters (Name, LanguageId, LetterTypeId Pronounciation, Description)
+            string sql = @"INSERT INTO dbo.Letters (Name, LanguageId, LetterTypeId, Pronounciation, Description)
                            VALUES (@Name, @LanguageId, @LetterTypeId, @Pronounciation, @Description);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = "SELECT * FROM dbo.Letters WHERE Name = @Name AND LanguageId = @LanguageId;";
+
+            data = SqlDataAccess.GetFirstTableDataFromParameters<LetterDataModel>(sql, new { Name = name, LanguageId = languageid });
+
+            return data.Id;
         }
 
         /// <summary>
@@ -45,7 +51,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         public static List<LetterDataModel> LoadLetters(int languageid)
         {
             string sql = @"SELECT Id, Name, LanguageId, LetterTypeId Pronounciation, Description FROM dbo.Letters WHERE LanguageId = @LanguageId;";
-            var parameters = new { LangaugeId = languageid };
+            var parameters = new { LanguageId = languageid };
 
             return SqlDataAccess.LoadData<LetterDataModel>(sql, parameters).ToList();
         }

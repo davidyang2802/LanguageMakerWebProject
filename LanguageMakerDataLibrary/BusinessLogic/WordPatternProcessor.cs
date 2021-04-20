@@ -18,7 +18,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// <param name="name">Name of the word pattern</param>
         /// <param name="pattern">The word pattern</param>
         /// <param name="languageid">Language Id associated with the word pattern</param>
-        /// <returns>Returns the number of records changed</returns>
+        /// <returns>Returns the id of the new word pattern</returns>
         public static int CreateWordPattern(string name, string pattern, int languageid)
         {
             WordPatternDataModel data = new WordPatternDataModel
@@ -31,7 +31,13 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"INSERT INTO dbo.WordPatterns (Name, Pattern, LanguageId)
                            VALUES (@Name, @Pattern, @LanguageId);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = "SELECT * FROM dbo.WordPatterns WHERE Name = @Name AND LanguageId = @LanguageId;";
+
+            data = SqlDataAccess.GetFirstTableDataFromParameters<WordPatternDataModel>(sql, new { Name = name, LanguageId = languageid });
+
+            return data.Id;
         }
 
         /// <summary>

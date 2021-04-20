@@ -20,7 +20,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// <param name="name">Name of the language</param>
         /// <param name="userid">User Id associated with the language</param>
         /// <param name="description">Description of the language</param>
-        /// <returns>Returns the number of records changed</returns>
+        /// <returns>Returns the Id of the new language</returns>
         public static int CreateLanguage(string name, int userid, string description)
         {
             LanguageDataModel data = new LanguageDataModel
@@ -33,7 +33,13 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"INSERT INTO dbo.Languages (Name, UserId, Description)
                            VALUES (@Name, @UserId, @Description);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = "SELECT * FROM dbo.Languages WHERE Name = @Name AND UserId = @UserId;";
+
+            data = SqlDataAccess.GetFirstTableDataFromParameters<LanguageDataModel>(sql, new { Name = name, UserId = userid });
+
+            return data.Id;
         }
 
         /// <summary>

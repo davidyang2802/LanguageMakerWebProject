@@ -35,9 +35,9 @@ namespace LanguageMakerDataLibrary.BusinessLogic
 
             sql = @"SELECT * FROM dbo.Classification WHERE Name = @Name AND LanguageId = @LanguageId;";
 
-            ClassificationDataModel classification = SqlDataAccess.GetFirstTableDataFromParameters<ClassificationDataModel>(sql, new { Name = name, LanguageId = languageid });
+            data = SqlDataAccess.GetFirstTableDataFromParameters<ClassificationDataModel>(sql, new { Name = name, LanguageId = languageid });
 
-            return classification.Id;
+            return data.Id;
         }
 
         /// <summary>
@@ -77,5 +77,4 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             return SqlDataAccess.UpdateData(sql, new { ClassificationId = classificationid });
         }
     }
-}
 }

@@ -178,7 +178,6 @@
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\Language\Languages.cshtml" />
     <Content Include="Views\Language\CreateLanguage.cshtml" />
-    <Content Include="Views\Language\SetupWordPatterns.cshtml" />
     <Content Include="Views\Language\LetterTypes.cshtml" />
     <Content Include="Views\Language\Letters.cshtml" />
     <Content Include="Views\Language\WordPatterns.cshtml" />

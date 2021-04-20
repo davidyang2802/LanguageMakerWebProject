@@ -34,9 +34,9 @@ namespace LanguageMakerDataLibrary.BusinessLogic
 
             sql = "SELECT * FROM dbo.Definitions WHERE Text = @Text AND LanguageId = @LanguageId;";
 
-            DefinitionDataModel definition = SqlDataAccess.GetFirstTableDataFromParameters<DefinitionDataModel>(sql, new { Text = text, LanguageId = languageid });
+            data = SqlDataAccess.GetFirstTableDataFromParameters<DefinitionDataModel>(sql, new { Text = text, LanguageId = languageid });
 
-            return definition.Id;
+            return data.Id;
         }
 
         /// <summary>

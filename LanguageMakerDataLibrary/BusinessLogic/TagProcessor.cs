@@ -18,7 +18,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// <param name="name">Name of the tag</param>
         /// <param name="languageid">Language Id associated with the tag</param>
         /// <param name="description">Description of the tag</param>
-        /// <returns>Returns the number of records changed</returns>
+        /// <returns>Returns the Id of the new tag</returns>
         public static int CreateTag(string name, int languageid, string description)
         {
             TagDataModel data = new TagDataModel
@@ -31,7 +31,13 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"INSERT INTO dbo.Tags (Name, LanguageId, Description)
                            VALUES (@Name, @LanguageId, @Description);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = "SELECT * FROM dbo.Tags WHERE Name = @Name AND LanguageId = @LanguageId;";
+
+            data = SqlDataAccess.GetFirstTableDataFromParameters<TagDataModel>(sql, new { Name = name, LanguageId = languageid });
+
+            return data.Id;
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// <param name="classificationid">Classification Id of the classification of the word</param>
         /// <param name="description">Description of the word</param>
         /// <param name="pronnounciation">Pronounciation of the word</param>
-        /// <returns>Returns the number of records changed</returns>
+        /// <returns>Returns the id of the new word</returns>
         public static int CreateWord(string text, int languageid, int classificationid, string description, string pronnounciation)
         {
             WordDataModel data = new WordDataModel
@@ -35,7 +35,13 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"INSERT INTO dbo.Words (Text, LanguageId, ClassificationId, Description, Pronounciation)
                            VALUES (@Text, @LanguageId, @ClassificationId, @Description, @Pronounciation);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = "SELECT * FROM dbo.Words WHERE Text = @Text AND LanguageId = @LanguageId;";
+
+            data = SqlDataAccess.GetFirstTableDataFromParameters<WordDataModel>(sql, new { Text = text, LanguageId = languageid });
+
+            return data.Id;
         }
 
         /// <summary>
@@ -69,7 +75,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// </summary>
         /// <param name="wordid">Word Id</param>
         /// <returns>Returns the number of records changed</returns>
-        public static int DeleteClassification(int wordid)
+        public static int DeleteWord(int wordid)
         {
             string sql = "DELETE FROM dbo.Words WHERE Id = @WordId;";
 

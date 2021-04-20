@@ -19,7 +19,7 @@ namespace LanguageMakerDataLibrary.BusinessLogic
         /// <param name="languageid">Langauge Id associated with the letter type</param>
         /// <param name="description">Description of the letter type</param>
         /// <param name="pattern">Pattern of the letter type</param>
-        /// <returns>Returns the number of records changed</returns>
+        /// <returns>Returns the Id of the new letter type</returns>
         public static int CreateLetterType(string name, int languageid, string description, char pattern)
         {
             LetterTypeDataModel data = new LetterTypeDataModel
@@ -33,7 +33,13 @@ namespace LanguageMakerDataLibrary.BusinessLogic
             string sql = @"INSERT INTO dbo.LetterTypes (Name, LanguageId, Description, Pattern)
                            VALUES (@Name, @LanguageId, @Description, @Pattern);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            sql = "SELECT * FROM dbo.LetterTypes WHERE Name = @Name AND LanguageId = @LanguageId;";
+
+            data = SqlDataAccess.GetFirstTableDataFromParameters<LetterTypeDataModel>(sql, new { Name = name, LanguageID = languageid });
+
+            return data.Id;
         }
 
         /// <summary>

@@ -6,14 +6,19 @@
 
 <h2>Classifications</h2>
 
-@{ 
+@if (Session["Alert Classifications M1"] != null)
+{
+    <div class="alert-dismissable" role="alert">@Session["Alert Classifications M1"]</div>
+}
+
+@{
     List<LanguageMakerWebProject.Models.ClassificationModel> classifications = (List<LanguageMakerWebProject.Models.ClassificationModel>)Session["Classifications"];
 }
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <table class="table">
         <tr>
             <th>
@@ -52,6 +57,10 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @if (Session["Alert Classifications M2"] != null)
+                {
+                    <div class="alert-dismissable" role="alert">@Session["Alert Classifications M2"]</div>
+                }
             </div>
         </div>
 

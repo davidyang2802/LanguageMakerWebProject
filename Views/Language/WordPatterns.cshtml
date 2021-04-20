@@ -6,11 +6,16 @@
 
 <h2>Word Patterns</h2>
 
-@{ 
+@if (Session["Alert Word Patterns M1"] != null)
+{
+    <div class="alert-dismissable" role="alert">@Session["Alert Word Patterns M1"]</div>
+}
+
+@{
     List<LanguageMakerWebProject.Models.WordPatternModel> wordpatterns = (List<LanguageMakerWebProject.Models.WordPatternModel>)Session["Word Patterns"];
 }
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
@@ -42,7 +47,7 @@
             </tr>
         }
     </table>
-    
+
     <div class="form-horizontal">
         <h4>WordPatternModel</h4>
         <hr />
@@ -52,6 +57,10 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @if (Session["Alert Word Patterns M2"] != null)
+                {
+                    <div class="alert-dismissable" role="alert">@Session["Alert Word Patterns M2"]</div>
+                }
             </div>
         </div>
 
@@ -60,6 +69,10 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Pattern, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Pattern, "", new { @class = "text-danger" })
+                @if (Session["Alert Word Patterns M3"] != null)
+                {
+                    <div class="alert-dismissable" role="alert">@Session["Alert Word Patterns M3"]</div>
+                }
             </div>
         </div>
 
